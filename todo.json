@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "task": "Buy groceries",
+    "status": "incomplete",
+    "priority": "medium",
+    "due_date": "2025-06-04"
+  },
+  {
+    "task": "learn mongoDb",
+    "status": "in progress",
+    "priority": "high",
+    "id": 4
+  },
+  {
+    "id": 3,
+    "task": "Call mom",
+    "status": "pending",
+    "priority": "low",
+    "due_date": "2025-06-01"
+  }
+]
