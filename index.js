@@ -1,7 +1,13 @@
 const express = require("express");
 const fs = require("fs");
+const morgan = require("morgan");
 const app = express();
+
+//MIDDLEWARES
 app.use(express.json());
+app.use(morgan("dev"));
+const todosRouter = express.Router();
+app.use("/api/v1/todos", todosRouter);
 
 //READ TODO FILE
 const todos = fs.readFileSync(`${__dirname}/todo.json`);
@@ -9,7 +15,7 @@ const todosJson = JSON.parse(todos);
 const PORT = 9000;
 
 //ROOT
-app.get("/v1/", (req, res) => {
+todosRouter.get("/v1/", (req, res) => {
   res.status(200).send("Hello world");
 });
 
@@ -61,9 +67,9 @@ function markTodoStatus(req, res) {
   );
 }
 
-app.route("/api/v1/todos").get(getAllTodos).post(createTodo);
-app
-  .route("/api/v1/todos/:id")
+todosRouter.route("/").get(getAllTodos).post(createTodo);
+todosRouter
+  .route("/:id")
   .get(getATodo)
   .delete(deleteTodo)
   .patch(markTodoStatus);
