@@ -1,51 +1,62 @@
 //READ TODO FILE
-const fs = require("fs");
-const todosJson = JSON.parse(fs.readFileSync("./todo.json"));
+const Todos = require("../models/todo");
 
 //GET ALL TODOS
-exports.getAllTodos = (req, res) => {
-  res.status(200).json({
-    message: "Todos fetched successfully",
-    data: todosJson,
-    result: todosJson.length,
-  });
+exports.getAllTodos = async (req, res, next) => {
+  try {
+    const data = await Todos.find();
+    res.status(200).json({
+      message: "Todo fetched successfully",
+      data,
+      result: data?.length,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 //GET SINGLE TODO
-exports.getATodo = (req, res) => {
-  const todo = todosJson.find((el) => el.id == req.params.id);
-  res.status(200).json({ message: "Todo fetched successfully", data: todo });
+exports.getATodo = async (req, res, next) => {
+  try {
+    const data = await Todos.find({ _id: req.params.id });
+    res.status(200).json({
+      message: "Todo fetched successfully",
+      data,
+    });
+  } catch (error) {
+    error.statusCode = 400;
+    next(error);
+  }
 };
 
-exports.createTodo = (req, res) => {
-  const newTodo = { ...req.body, id: todosJson[todosJson.length - 1]?.id + 1 };
-  todosJson.push(newTodo);
-  fs.writeFile(`${__dirname}/todo.json`, JSON.stringify(todosJson), () =>
-    res.status(201).json({ message: "Todo created successfully" })
-  );
+//CREATE A TODO
+exports.createTodo = async (req, res, next) => {
+  try {
+    await Todos.create(req.body);
+    res.status(201).json({ message: "Todo created successfully" });
+  } catch (error) {
+    next(error);
+  }
 };
 
 //DELETE A TODO
-exports.deleteTodo = (req, res) => {
-  const id = req.params.id;
-  const todo = todosJson.find((el) => el.id == id);
-  if (!todo) res.status(404).send(`No todo with ID of ${id}`);
-
-  const newTodos = todosJson.filter((el) => el.id != id);
-  fs.writeFile(`${__dirname}/todo.json`, JSON.stringify(newTodos), () => {
-    res.status(204).send({ message: "successfully deleted" });
-  });
+exports.deleteTodo = async (req, res, next) => {
+  try {
+    await Todos.deleteOne({ _id: req.params.id });
+    res.status(204).send("");
+  } catch (error) {
+    next(error);
+  }
 };
 
 //MARK TODO STATUS: COMPLETED, PROGRESS OR INCOMPLETED
-exports.markTodoStatus = (req, res) => {
-  const id = req.params.id;
-  if (!id) res.status(404).send("A valid id is required");
-  const todo = todosJson.find((el) => el.id == id);
-  Object.assign(todo, req.body);
-  const updatedTodo = todosJson.map((el) => (el.id == id ? todo : el));
-
-  fs.writeFile(`${__dirname}/todo.json`, JSON.stringify(updatedTodo), () =>
-    res.status(200).send({ message: `Todo marked as ${req.body.status}` })
-  );
+exports.markTodoStatus = async (req, res, next) => {
+  try {
+    await Todos.updateOne({ _id: req.params.id }, { $set: req.body });
+    res.status(200).json({
+      message: `Todo status marked as ${req.body.status}`,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
