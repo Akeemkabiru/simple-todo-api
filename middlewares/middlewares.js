@@ -7,9 +7,13 @@ app.use((err, req, res, next) => {
     message: err.message,
   });
 });
-
+app.use(express.static(`./view`));
 app.use(express.json());
-// app.use(morgan("dev"));
+
+if (process.env.ENV == "development") {
+  app.use(morgan("dev"));
+}
+
 app.use("/v1/api/todos", todosRouter);
 
 module.exports = app;
