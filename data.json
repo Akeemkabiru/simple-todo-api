@@ -1,0 +1,162 @@
+[
+  {
+    "task": "Write project proposal",
+    "status": "pending",
+    "description": "Draft and submit the initial project proposal to the client.",
+    "priority": "high",
+    "createdAt": "2025-06-01",
+    "due_date": "2025-06-05"
+  },
+  {
+    "task": "Review codebase",
+    "status": "completed",
+    "description": "Go through the existing codebase to understand structure and logic.",
+    "priority": "medium",
+    "createdAt": "2025-05-25",
+    "due_date": "2025-05-30"
+  },
+  {
+    "task": "Setup CI/CD pipeline",
+    "status": "in-progress",
+    "description": "Implement automated testing and deployment using GitHub Actions.",
+    "priority": "high",
+    "createdAt": "2025-06-03",
+    "due_date": "2025-06-10"
+  },
+  {
+    "task": "Design homepage layout",
+    "status": "pending",
+    "description": "Create wireframes for the website homepage using Figma.",
+    "priority": "medium",
+    "createdAt": "2025-06-04",
+    "due_date": "2025-06-08"
+  },
+  {
+    "task": "Fix login bug",
+    "status": "in-progress",
+    "description": "Resolve the issue where login fails for certain valid users.",
+    "priority": "high",
+    "createdAt": "2025-06-02",
+    "due_date": "2025-06-06"
+  },
+  {
+    "task": "Update dependencies",
+    "status": "completed",
+    "description": "Update project dependencies to latest stable versions.",
+    "priority": "low",
+    "createdAt": "2025-05-28",
+    "due_date": "2025-06-01"
+  },
+  {
+    "task": "Write unit tests",
+    "status": "pending",
+    "description": "Cover key modules with unit tests to ensure reliability.",
+    "priority": "high",
+    "createdAt": "2025-06-05",
+    "due_date": "2025-06-12"
+  },
+  {
+    "task": "Create API documentation",
+    "status": "pending",
+    "description": "Document all available API endpoints with examples.",
+    "priority": "medium",
+    "createdAt": "2025-06-06",
+    "due_date": "2025-06-13"
+  },
+  {
+    "task": "Organize team meeting",
+    "status": "completed",
+    "description": "Schedule a meeting to discuss next sprint goals.",
+    "priority": "low",
+    "createdAt": "2025-05-30",
+    "due_date": "2025-06-02"
+  },
+  {
+    "task": "Implement search feature",
+    "status": "in-progress",
+    "description": "Add search functionality with filters and suggestions.",
+    "priority": "high",
+    "createdAt": "2025-06-01",
+    "due_date": "2025-06-09"
+  },
+  {
+    "task": "Optimize database queries",
+    "status": "pending",
+    "description": "Improve query performance to reduce load times.",
+    "priority": "medium",
+    "createdAt": "2025-06-07",
+    "due_date": "2025-06-15"
+  },
+  {
+    "task": "Clean up unused assets",
+    "status": "completed",
+    "description": "Remove old and unused images and files from the project.",
+    "priority": "low",
+    "createdAt": "2025-05-26",
+    "due_date": "2025-05-31"
+  },
+  {
+    "task": "Refactor user module",
+    "status": "in-progress",
+    "description": "Improve readability and maintainability of user-related code.",
+    "priority": "medium",
+    "createdAt": "2025-06-03",
+    "due_date": "2025-06-10"
+  },
+  {
+    "task": "Add user onboarding",
+    "status": "pending",
+    "description": "Create an onboarding experience for new users.",
+    "priority": "high",
+    "createdAt": "2025-06-06",
+    "due_date": "2025-06-13"
+  },
+  {
+    "task": "Prepare monthly report",
+    "status": "completed",
+    "description": "Compile data and generate the monthly performance report.",
+    "priority": "medium",
+    "createdAt": "2025-05-31",
+    "due_date": "2025-06-01"
+  },
+  {
+    "task": "Conduct UX testing",
+    "status": "pending",
+    "description": "Collect feedback on user experience and interface usability.",
+    "priority": "medium",
+    "createdAt": "2025-06-05",
+    "due_date": "2025-06-14"
+  },
+  {
+    "task": "Integrate payment gateway",
+    "status": "in-progress",
+    "description": "Add support for Stripe and PayPal payment options.",
+    "priority": "high",
+    "createdAt": "2025-06-02",
+    "due_date": "2025-06-11"
+  },
+  {
+    "task": "Fix mobile layout issues",
+    "status": "pending",
+    "description": "Resolve layout inconsistencies on mobile devices.",
+    "priority": "high",
+    "createdAt": "2025-06-04",
+    "due_date": "2025-06-07"
+  },
+  {
+    "task": "Backup production database",
+    "status": "completed",
+    "description": "Perform and verify a backup of the production database.",
+    "priority": "low",
+    "createdAt": "2025-05-27",
+    "due_date": "2025-05-28"
+  },
+  {
+    "task": "Add dark mode",
+    "status": "pending",
+    "description": "Allow users to switch between light and dark themes.",
+    "priority": "medium",
+    "createdAt": "2025-06-06",
+    "due_date": "2025-06-15"
+  }
+]

@@ -3,8 +3,12 @@ const Todos = require("../models/todo");
 
 //GET ALL TODOS
 exports.getAllTodos = async (req, res, next) => {
+  const queryObj = { ...req.query };
+  const excludedQueries = ["page", "limit", "sort", "field"];
+  excludedQueries.forEach((el) => delete queryObj[el]);
   try {
-    const data = await Todos.find();
+    const query = Todos.find(queryObj);
+    const data = await query;
     res.status(200).json({
       message: "Todo fetched successfully",
       data,
