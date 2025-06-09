@@ -3,7 +3,7 @@ const todoSchema = new mongoose.Schema(
   {
     task: {
       type: String,
-      required: [true, "Task is required"],
+      required: true,
       unique: true,
       trim: true,
     },
@@ -17,11 +17,11 @@ const todoSchema = new mongoose.Schema(
       default: "pending",
     },
     due: {
-      type: Date,
+      type: String,
       required: [true, "Time and Date are required"],
     },
     start: {
-      type: Date,
+      type: String,
       required: [true, "Time and Date are required"],
     },
 

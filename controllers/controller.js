@@ -29,8 +29,16 @@ exports.getATodo = async (req, res, next) => {
 
 //CREATE A TODO
 exports.createTodo = async (req, res, next) => {
+  const { start_date, start_time, due_date, due_time, ...rest } = req.body;
+  if (!(start_date || start_time)) {
+    return response(res, "Start and due date is required", 400);
+  }
   try {
-    await Todos.create(req.body);
+    const start = new Date(`${start_date}T${start_time || "00:00"}`);
+    const due = new Date(`${due_date}T${due_time || "00:00"}`);
+    const todo = { start, due, ...rest };
+
+    await Todos.create(todo);
     response(res, "Todo fetched successfully", 201);
   } catch (error) {
     next(error);
