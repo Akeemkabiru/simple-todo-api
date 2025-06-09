@@ -1,19 +1,17 @@
 //READ TODO FILE
 const Todos = require("../models/todo");
+const { response } = require("../utility/response");
 
 //GET ALL TODOS
 exports.getAllTodos = async (req, res, next) => {
   const queryObj = { ...req.query };
   const excludedQueries = ["page", "limit", "sort", "field"];
   excludedQueries.forEach((el) => delete queryObj[el]);
+
   try {
     const query = Todos.find(queryObj);
     const data = await query;
-    res.status(200).json({
-      message: "Todo fetched successfully",
-      data,
-      result: data?.length,
-    });
+    response(res, "Todo fetched successfully", 200, data, data.length);
   } catch (error) {
     next(error);
   }
@@ -23,10 +21,7 @@ exports.getAllTodos = async (req, res, next) => {
 exports.getATodo = async (req, res, next) => {
   try {
     const data = await Todos.findById(req.params.id);
-    res.status(200).json({
-      message: "Todo fetched successfully",
-      data,
-    });
+    response(res, "Todo fetched successfully", 200, data);
   } catch (error) {
     next(error);
   }
@@ -36,7 +31,7 @@ exports.getATodo = async (req, res, next) => {
 exports.createTodo = async (req, res, next) => {
   try {
     await Todos.create(req.body);
-    res.status(201).json({ message: "Todo created successfully" });
+    response(res, "Todo fetched successfully", 201);
   } catch (error) {
     next(error);
   }
@@ -46,7 +41,7 @@ exports.createTodo = async (req, res, next) => {
 exports.deleteTodo = async (req, res, next) => {
   try {
     await Todos.findByIdAndDelete(req.params.id);
-    res.status(204).send("");
+    response(res, "Todo fetched successfully", 204);
   } catch (error) {
     next(error);
   }
@@ -56,9 +51,7 @@ exports.deleteTodo = async (req, res, next) => {
 exports.markTodoStatus = async (req, res, next) => {
   try {
     await Todos.findByIdAndUpdate(req.params.id, req.body, {});
-    res.status(200).json({
-      message: `Todo status marked as ${req.body.status}`,
-    });
+    response(res, `Todo status marked as ${req.body.status}`, 200);
   } catch (error) {
     next(error);
   }
@@ -67,7 +60,7 @@ exports.markTodoStatus = async (req, res, next) => {
 //ERROR HANDLERs
 //global error
 exports.errorHandler = (err, req, res, next) => {
-  return res.status(400).json({ status: "failed", message: err.message });
+  response(res, err.message, 400);
 };
 
 //undefined error
