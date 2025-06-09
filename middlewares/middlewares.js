@@ -1,19 +1,12 @@
 const express = require("express");
 const todosRouter = require("../routes/routes");
+const { errorHandler, undefinedError } = require("../controllers/controller");
 const app = express();
-app.use((err, req, res, next) => {
-  res.status(err.statusCode).json({
-    status: "error",
-    message: err.message,
-  });
-});
+
 app.use(express.static(`./view`));
 app.use(express.json());
-
-if (process.env.ENV == "development") {
-  app.use(morgan("dev"));
-}
-
 app.use("/v1/api/todos", todosRouter);
+app.use(undefinedError);
+app.use(errorHandler);
 
 module.exports = app;

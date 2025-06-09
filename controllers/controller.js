@@ -28,7 +28,6 @@ exports.getATodo = async (req, res, next) => {
       data,
     });
   } catch (error) {
-    error.statusCode = 400;
     next(error);
   }
 };
@@ -63,4 +62,15 @@ exports.markTodoStatus = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+//ERROR HANDLERs
+//global error
+exports.errorHandler = (err, req, res, next) => {
+  return res.status(400).json({ status: "failed", message: err.message });
+};
+
+//undefined error
+exports.undefinedError = (req, res, next) => {
+  next(new AppError("route not found", 404));
 };
