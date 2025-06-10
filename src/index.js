@@ -1,6 +1,7 @@
-require("dotenv").config({ path: "./config/.env" });
+require("dotenv").config({ path: "./src/config/.env" });
 const app = require("./middlewares/middlewares");
 const mongoose = require("mongoose");
+
 const DB = process.env.DB_URI.replace("<db_password>", process.env.DB_PASSWORD);
 
 mongoose
