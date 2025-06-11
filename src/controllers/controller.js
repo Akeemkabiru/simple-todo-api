@@ -3,13 +3,34 @@ const Todos = require("../models/todo");
 const { response } = require("../utility/response");
 
 //GET ALL TODOS
+
+//FILTER
 exports.getAllTodos = async (req, res, next) => {
   const queryObj = { ...req.query };
   const excludedQueries = ["page", "limit", "sort", "field"];
   excludedQueries.forEach((el) => delete queryObj[el]);
+  //PAGINATION
+  const page = req.query.page;
+  const limit = req.query.limit;
+  const skips = (page - 1) * limit;
+
+  const totalNums = await Todos.countDocuments();
+  if (totalNums < skips) {
+    response(res, "No more data left", 400);
+  }
+
+  //LIMIT FIELD
+  const field = req.query.field;
+
+  //SORT
+  const sort = req.query.sort;
 
   try {
-    const query = Todos.find(queryObj);
+    const query = Todos.find(queryObj)
+      .sort(sort)
+      .skip(skips)
+      .limit(limit)
+      .select(field);
     const data = await query;
     response(res, "Todo fetched successfully", 200, data, data.length);
   } catch (error) {
