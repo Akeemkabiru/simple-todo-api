@@ -13,7 +13,10 @@ const todoSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "in progress", "completed", "overdue"],
+      enum: {
+        values: ["pending", "in progress", "completed", "overdue"],
+        message: "Status can either be pending, completed or overdue",
+      },
       default: "pending",
     },
     due: {
@@ -46,8 +49,33 @@ const todoSchema = new mongoose.Schema(
     },
     priority: Number,
   },
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } },
   { timestamps: true }
 );
+
+//VIRTUAL PROPERTY AND NOT SAVED TO THE DATABASE
+// todoSchema.virtual("taskLogs").get(function () {
+//   return this.task;
+// });
+
+//DOOCUMENT MIDDLEWARES or HOOKS
+
+//document right before saving it to database
+// todoSchema.pre("save", function (next) {
+//   console.log(this);
+//   next();
+// });
+
+//after save
+// todoSchema.post("save", function (doc) {
+//   console.log(doc.task);
+// });
+
+//QUERY MIDDLEWARE
+todoSchema.pre("/^find/", function (next) {
+  this.find({ priority: { $gte: 4 } });
+  next();
+});
 
 const Todos = mongoose.model("Todos", todoSchema);
 

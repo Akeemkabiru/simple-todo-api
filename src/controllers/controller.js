@@ -61,7 +61,7 @@ exports.createTodo = async (req, res, next) => {
     const todo = { start, due, ...rest };
 
     await Todos.create(todo);
-    response(res, "Todo fetched successfully", 201);
+    response(res, "Todo created successfully", 201);
   } catch (error) {
     next(error);
   }
