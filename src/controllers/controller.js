@@ -1,5 +1,7 @@
 //READ TODO FILE
+const { userValidationSchema } = require("../../schema");
 const Todos = require("../models/todo");
+const { User } = require("../models/user");
 const AppError = require("../utility/error");
 const { response } = require("../utility/response");
 
@@ -90,14 +92,13 @@ exports.markTodoStatus = async (req, res, next) => {
   }
 };
 
-//ERROR HANDLERs
 //global error
-exports.errorHandler = (err, req, res, next) => {
+exports.programErrorHandler = (err, req, res, next) => {
   response(res, err.message, 400);
 };
 
-//undefined error
-exports.undefinedError = (req, res, next) => {
+//operational error
+exports.operationalError = (req, res, next) => {
   next(new AppError("route not found", 404));
 };
 
@@ -113,6 +114,20 @@ exports.stats = async (req, res, next) => {
       },
     ]);
     response(res, "Todos stats fetched successfully", 200, data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//USER
+exports.signup = async (req, res, next) => {
+  const { error } = userValidationSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) return response(res, error.details[0].message, 400);
+  try {
+    await User.create(req.body);
+    response(res, "User created successfully", 201);
   } catch (error) {
     next(error);
   }
