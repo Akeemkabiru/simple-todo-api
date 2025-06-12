@@ -44,6 +44,7 @@ const todoSchema = new mongoose.Schema(
       default: "Non",
       required: false,
     },
+    priority: Number,
   },
   { timestamps: true }
 );

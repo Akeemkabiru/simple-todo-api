@@ -1,5 +1,6 @@
 //READ TODO FILE
 const Todos = require("../models/todo");
+const AppError = require("../utility/error");
 const { response } = require("../utility/response");
 
 //GET ALL TODOS
@@ -78,8 +79,11 @@ exports.deleteTodo = async (req, res, next) => {
 
 //MARK TODO STATUS: COMPLETED, PROGRESS OR INCOMPLETED
 exports.markTodoStatus = async (req, res, next) => {
+  if (!req.body.status) return response(res, "Status not defined", 400);
   try {
-    await Todos.findByIdAndUpdate(req.params.id, req.body, {});
+    await Todos.findByIdAndUpdate(req.params.id, req.body, {
+      runValidators: true,
+    });
     response(res, `Todo status marked as ${req.body.status}`, 200);
   } catch (error) {
     next(error);
@@ -95,4 +99,21 @@ exports.errorHandler = (err, req, res, next) => {
 //undefined error
 exports.undefinedError = (req, res, next) => {
   next(new AppError("route not found", 404));
+};
+
+//using aggregation pipeline to do some calculation
+exports.stats = async (req, res, next) => {
+  try {
+    const data = await Todos.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+    response(res, "Todos stats fetched successfully", 200, data);
+  } catch (error) {
+    next(error);
+  }
 };
