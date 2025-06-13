@@ -1,13 +1,14 @@
-require("dotenv").config({ path: "./src/config/.env" });
-const app = require("./middlewares/middlewares");
-const mongoose = require("mongoose");
+const connectDB = require("./config/database");
+const express = require("express");
+const { operationalError, programError } = require("./utility");
+const appRouter = require("./routes/routes");
+const app = express();
 
-const DB = process.env.DB_URI.replace("<db_password>", process.env.DB_PASSWORD);
-
-mongoose
-  .connect(DB)
-  .then(() => console.log("Connected to the database"))
-  .catch(() => console.log("Could not connect to database"));
+connectDB();
+app.use(express.json());
+app.use("/v1/api/", appRouter);
+app.use(operationalError);
+app.use(programError);
 
 const port = process.env.PORT;
 app.listen(port, () => console.log(`Server running on ${port}`));

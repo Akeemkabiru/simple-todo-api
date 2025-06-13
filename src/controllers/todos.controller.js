@@ -1,14 +1,8 @@
-//READ TODO FILE
-const { userValidationSchema } = require("../../schema");
-const Todos = require("../models/todo");
-const { User } = require("../models/user");
-const AppError = require("../utility/error");
-const { response } = require("../utility/response");
+const Todo = require("../models/todo");
+const { response } = require("../utility");
 
-//GET ALL TODOS
-
-//FILTER
-exports.getAllTodos = async (req, res, next) => {
+//GET ALL Todo
+exports.getAllTodo = async (req, res, next) => {
   const queryObj = { ...req.query };
   const excludedQueries = ["page", "limit", "sort", "field"];
   excludedQueries.forEach((el) => delete queryObj[el]);
@@ -17,7 +11,7 @@ exports.getAllTodos = async (req, res, next) => {
   const limit = req.query.limit;
   const skips = (page - 1) * limit;
 
-  const totalNums = await Todos.countDocuments();
+  const totalNums = await Todo.countDocuments();
   if (totalNums < skips) {
     response(res, "No more data left", 400);
   }
@@ -29,7 +23,7 @@ exports.getAllTodos = async (req, res, next) => {
   const sort = req.query.sort;
 
   try {
-    const query = Todos.find(queryObj)
+    const query = Todo.find(queryObj)
       .sort(sort)
       .skip(skips)
       .limit(limit)
@@ -44,7 +38,7 @@ exports.getAllTodos = async (req, res, next) => {
 //GET SINGLE TODO
 exports.getATodo = async (req, res, next) => {
   try {
-    const data = await Todos.findById(req.params.id);
+    const data = await Todo.findById(req.params.id);
     response(res, "Todo fetched successfully", 200, data);
   } catch (error) {
     next(error);
@@ -62,7 +56,7 @@ exports.createTodo = async (req, res, next) => {
     const due = new Date(`${due_date}T${due_time || "00:00"}`);
     const todo = { start, due, ...rest };
 
-    await Todos.create(todo);
+    await Todo.create(todo);
     response(res, "Todo created successfully", 201);
   } catch (error) {
     next(error);
@@ -72,7 +66,7 @@ exports.createTodo = async (req, res, next) => {
 //DELETE A TODO
 exports.deleteTodo = async (req, res, next) => {
   try {
-    await Todos.findByIdAndDelete(req.params.id);
+    await Todo.findByIdAndDelete(req.params.id);
     response(res, "Todo fetched successfully", 204);
   } catch (error) {
     next(error);
@@ -83,7 +77,7 @@ exports.deleteTodo = async (req, res, next) => {
 exports.markTodoStatus = async (req, res, next) => {
   if (!req.body.status) return response(res, "Status not defined", 400);
   try {
-    await Todos.findByIdAndUpdate(req.params.id, req.body, {
+    await Todo.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,
     });
     response(res, `Todo status marked as ${req.body.status}`, 200);
@@ -92,20 +86,10 @@ exports.markTodoStatus = async (req, res, next) => {
   }
 };
 
-//global error
-exports.programErrorHandler = (err, req, res, next) => {
-  response(res, err.message, 400);
-};
-
-//operational error
-exports.operationalError = (req, res, next) => {
-  next(new AppError("route not found", 404));
-};
-
-//using aggregation pipeline to do some calculation
+//STATS
 exports.stats = async (req, res, next) => {
   try {
-    const data = await Todos.aggregate([
+    const data = await Todo.aggregate([
       {
         $group: {
           _id: "$status",
@@ -113,21 +97,7 @@ exports.stats = async (req, res, next) => {
         },
       },
     ]);
-    response(res, "Todos stats fetched successfully", 200, data);
-  } catch (error) {
-    next(error);
-  }
-};
-
-//USER
-exports.signup = async (req, res, next) => {
-  const { error } = userValidationSchema.validate(req.body, {
-    abortEarly: false,
-  });
-  if (error) return response(res, error.details[0].message, 400);
-  try {
-    await User.create(req.body);
-    response(res, "User created successfully", 201);
+    response(res, "Todo stats fetched successfully", 200, data);
   } catch (error) {
     next(error);
   }

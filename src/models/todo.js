@@ -7,10 +7,7 @@ const todoSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    description: {
-      type: String,
-      required: true,
-    },
+    description: String,
     status: {
       type: String,
       enum: {
@@ -47,11 +44,13 @@ const todoSchema = new mongoose.Schema(
       default: "Non",
       required: false,
     },
-    priority: Number,
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
   { timestamps: true }
 );
+
+const Todo = mongoose.model("Todo", todoSchema);
+module.exports = Todo;
 
 //VIRTUAL PROPERTY AND NOT SAVED TO THE DATABASE
 // todoSchema.virtual("taskLogs").get(function () {
@@ -72,11 +71,7 @@ const todoSchema = new mongoose.Schema(
 // });
 
 //QUERY MIDDLEWARE
-todoSchema.pre("/^find/", function (next) {
-  this.find({ priority: { $gte: 4 } });
-  next();
-});
-
-const Todos = mongoose.model("Todos", todoSchema);
-
-module.exports = Todos;
+// todoSchema.pre("/^find/", function (next) {
+//   this.find({ priority: { $gte: 4 } });
+//   next();
+// });

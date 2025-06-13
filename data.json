@@ -5,8 +5,7 @@
     "status": "in progress",
     "due": "2025-06-30T17:00",
     "start": "2025-06-25T09:00",
-    "category": "Work",
-    "priority": 3
+    "category": "Work"
   },
   {
     "task": "Grocery shopping",
@@ -14,8 +13,7 @@
     "status": "pending",
     "due": "2025-06-12T17:00",
     "start": "2025-06-12T15:00",
-    "category": "Errands",
-    "priority": 2
+    "category": "Errands"
   },
   {
     "task": "Read psychology book",
@@ -23,8 +21,7 @@
     "status": "pending",
     "due": "2025-06-21T20:00",
     "start": "2025-06-20T18:00",
-    "category": "Learning",
-    "priority": 1
+    "category": "Learning"
   },
   {
     "task": "Workout session",
@@ -32,8 +29,7 @@
     "status": "completed",
     "due": "2025-06-11T07:30",
     "start": "2025-06-11T06:00",
-    "category": "Health",
-    "priority": 4
+    "category": "Health"
   },
   {
     "task": "Call mom",
@@ -41,8 +37,7 @@
     "status": "pending",
     "due": "2025-06-13T19:00",
     "start": "2025-06-13T17:30",
-    "category": "Relationship",
-    "priority": 2
+    "category": "Relationship"
   },
   {
     "task": "Pay electricity bill",
@@ -50,8 +45,7 @@
     "status": "overdue",
     "due": "2025-06-05T20:00",
     "start": "2025-06-03T11:00",
-    "category": "Finances",
-    "priority": 5
+    "category": "Finances"
   },
   {
     "task": "Meditation",
@@ -59,8 +53,7 @@
     "status": "completed",
     "due": "2025-06-10T08:00",
     "start": "2025-06-10T07:00",
-    "category": "Spirituality",
-    "priority": 1
+    "category": "Spirituality"
   },
   {
     "task": "Attend JavaScript workshop",
@@ -68,8 +61,7 @@
     "status": "in progress",
     "due": "2025-06-16T14:00",
     "start": "2025-06-16T10:00",
-    "category": "Academics",
-    "priority": 4
+    "category": "Academics"
   },
   {
     "task": "Doctor appointment",
@@ -77,8 +69,7 @@
     "status": "pending",
     "due": "2025-06-14T10:00",
     "start": "2025-06-14T08:30",
-    "category": "Health",
-    "priority": 5
+    "category": "Health"
   },
   {
     "task": "Clean apartment",
@@ -86,8 +77,7 @@
     "status": "pending",
     "due": "2025-06-13T14:30",
     "start": "2025-06-13T12:00",
-    "category": "Home",
-    "priority": 3
+    "category": "Home"
   },
   {
     "task": "Team meeting",
@@ -95,8 +85,7 @@
     "status": "completed",
     "due": "2025-06-09T11:00",
     "start": "2025-06-09T10:00",
-    "category": "Work",
-    "priority": 3
+    "category": "Work"
   },
   {
     "task": "Buy birthday gift",
@@ -104,8 +93,7 @@
     "status": "pending",
     "due": "2025-06-17T20:00",
     "start": "2025-06-17T18:00",
-    "category": "Personal",
-    "priority": 2
+    "category": "Personal"
   },
   {
     "task": "Watch movie",
@@ -113,8 +101,7 @@
     "status": "pending",
     "due": "2025-06-19T21:00",
     "start": "2025-06-19T19:00",
-    "category": "Fun",
-    "priority": 1
+    "category": "Fun"
   },
   {
     "task": "Budget review",
@@ -122,8 +109,7 @@
     "status": "completed",
     "due": "2025-06-08T19:00",
     "start": "2025-06-08T17:00",
-    "category": "Finances",
-    "priority": 4
+    "category": "Finances"
   },
   {
     "task": "Submit assignment",
@@ -131,8 +117,7 @@
     "status": "overdue",
     "due": "2025-06-07T23:59",
     "start": "2025-06-06T20:00",
-    "category": "Academics",
-    "priority": 5
+    "category": "Academics"
   },
   {
     "task": "Volunteer work",
@@ -140,8 +125,7 @@
     "status": "pending",
     "due": "2025-06-23T12:00",
     "start": "2025-06-23T09:00",
-    "category": "Personal",
-    "priority": 3
+    "category": "Personal"
   },
   {
     "task": "Laundry day",
@@ -149,8 +133,7 @@
     "status": "pending",
     "due": "2025-06-15T17:00",
     "start": "2025-06-15T14:00",
-    "category": "Home",
-    "priority": 2
+    "category": "Home"
   },
   {
     "task": "Start online course",
@@ -158,8 +141,7 @@
     "status": "in progress",
     "due": "2025-06-29T23:00",
     "start": "2025-06-24T10:00",
-    "category": "Learning",
-    "priority": 4
+    "category": "Learning"
   },
   {
     "task": "Fix bike",
@@ -167,8 +149,7 @@
     "status": "pending",
     "due": "2025-06-20T17:00",
     "start": "2025-06-20T14:00",
-    "category": "Errands",
-    "priority": 2
+    "category": "Errands"
   },
   {
     "task": "Plan weekend trip",
@@ -176,7 +157,6 @@
     "status": "pending",
     "due": "2025-06-18T20:00",
     "start": "2025-06-18T16:00",
-    "category": "Fun",
-    "priority": 3
+    "category": "Fun"
   }
 ]

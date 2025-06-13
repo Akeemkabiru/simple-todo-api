@@ -1,15 +1,10 @@
 require("dotenv").config({ path: `./src/config/.env` });
 const fs = require("fs");
-const mongoose = require("mongoose");
 const Todos = require("./src/models/todo");
+const connectDB = require("./src/config/database");
+const data = JSON.parse(fs.readFileSync(`${__dirname}/data.json`));
 
-//READ FILE
-const data = JSON.parse(fs.readFileSync(`${__dirname}/data.json`)); //converted to javascript object
-const DB = process.env.DB_URI.replace("<db_password>", process.env.DB_PASSWORD);
-mongoose
-  .connect(DB)
-  .then(() => console.log("Connected to database"))
-  .catch(() => console.log("Failed to connect to database"));
+connectDB();
 
 //UPLOAD TO DATABASE
 const upload = async () => {
