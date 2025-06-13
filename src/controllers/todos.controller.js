@@ -39,6 +39,8 @@ exports.getAllTodo = async (req, res, next) => {
 exports.getATodo = async (req, res, next) => {
   try {
     const data = await Todo.findById(req.params.id);
+    if (!data)
+      return response(res, `Todo of ID: ${req.params.id} does not exist`, 400);
     response(res, "Todo fetched successfully", 200, data);
   } catch (error) {
     next(error);
@@ -66,8 +68,10 @@ exports.createTodo = async (req, res, next) => {
 //DELETE A TODO
 exports.deleteTodo = async (req, res, next) => {
   try {
-    await Todo.findByIdAndDelete(req.params.id);
-    response(res, "Todo fetched successfully", 204);
+    const deleted = await Todo.findByIdAndDelete(req.params.id);
+    if (!deleted)
+      return response(res, `Todo of ID: ${req.params.id} does not exist`, 400);
+    response(res, "Todo deleted successfully", 204);
   } catch (error) {
     next(error);
   }
@@ -77,9 +81,16 @@ exports.deleteTodo = async (req, res, next) => {
 exports.markTodoStatus = async (req, res, next) => {
   if (!req.body.status) return response(res, "Status not defined", 400);
   try {
-    await Todo.findByIdAndUpdate(req.params.id, req.body, {
-      runValidators: true,
-    });
+    const doc = await Todo.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      {
+        runValidators: true,
+      }
+    );
+    if (!doc)
+      return response(res, `Todo of ID: ${req.params.id} does not exist`, 400);
+
     response(res, `Todo status marked as ${req.body.status}`, 200);
   } catch (error) {
     next(error);

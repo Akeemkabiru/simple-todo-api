@@ -1,19 +1,53 @@
-# Todo List API
+## Todo List API
 
-A simple RESTful Todo List API built with **Node.js**, **Express**, and **MongoDB**. This API allows you to create, read, update, and delete todos. Ideal as a starter backend project or for integrating into a frontend app.
+A fully-featured RESTful Todo List API built with Node.js, Express, and MongoDB. Now with JWT-based authentication, user-specific todos, and additional enhancements to make it production-ready.
 
 ## Features
 
-- ✅ Create a new todo  
-- 📋 Get all todos  
-- 🔍 Get a specific todo by ID  
-- ✏️ Update a todo  
-- ❌ Delete a todo  
-- 🌐 RESTful API with JSON responses
+✅ User Authentication
+
+🔐 Register and login with secure password hashing
+
+🔑 JWT-based authentication and protected routes
+
+## ✅ CRUD Operations
+
+🆕 Create a new todo
+
+📋 Get all todos (user-specific)
+
+🔍 Get a specific todo by ID
+
+✏️ Update a todo
+
+❌ Delete a todo
+
+⚙️ Advanced Features
+
+📆 Due dates and priorities
+
+## ✅ Toggle completion status
+
+🔍 Filter todos by status, priority, or date
+
+📡 RESTful API with clean JSON responses
+
+🌐 CORS-enabled for frontend integration
+
+🔒 Environment variables managed with dotenv
 
 ## Tech Stack
 
-- Node.js  
-- Express  
-- MongoDB (via Mongoose)  
-- dotenv
+Node.js
+
+Express.js
+
+MongoDB + Mongoose
+
+JWT (JSON Web Tokens)
+
+bcrypt.js (for password hashing)
+
+dotenv
+
+cors
