@@ -4,7 +4,6 @@ const todoSchema = new mongoose.Schema(
     task: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
     description: String,
@@ -51,27 +50,3 @@ const todoSchema = new mongoose.Schema(
 
 const Todo = mongoose.model("Todo", todoSchema);
 module.exports = Todo;
-
-//VIRTUAL PROPERTY AND NOT SAVED TO THE DATABASE
-// todoSchema.virtual("taskLogs").get(function () {
-//   return this.task;
-// });
-
-//DOOCUMENT MIDDLEWARES or HOOKS
-
-//document right before saving it to database
-// todoSchema.pre("save", function (next) {
-//   console.log(this);
-//   next();
-// });
-
-//after save
-// todoSchema.post("save", function (doc) {
-//   console.log(doc.task);
-// });
-
-//QUERY MIDDLEWARE
-// todoSchema.pre("/^find/", function (next) {
-//   this.find({ priority: { $gte: 4 } });
-//   next();
-// });

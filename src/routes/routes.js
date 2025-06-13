@@ -6,7 +6,7 @@ const {
   getAllTodo,
   getATodo,
   deleteTodo,
-  markTodoStatus,
+  updateTodoStatus,
 } = require("../controllers/todos.controller");
 const appRouter = express.Router();
 
@@ -17,6 +17,6 @@ appRouter
   .route("/todos/:id")
   .get(getATodo)
   .delete(deleteTodo)
-  .patch(markTodoStatus);
+  .patch(updateTodoStatus);
 
 module.exports = appRouter;

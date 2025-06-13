@@ -78,7 +78,7 @@ exports.deleteTodo = async (req, res, next) => {
 };
 
 //MARK TODO STATUS: COMPLETED, PROGRESS OR INCOMPLETED
-exports.markTodoStatus = async (req, res, next) => {
+exports.updateTodoStatus = async (req, res, next) => {
   if (!req.body.status) return response(res, "Status not defined", 400);
   try {
     const doc = await Todo.findByIdAndUpdate(
