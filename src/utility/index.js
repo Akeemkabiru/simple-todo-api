@@ -15,8 +15,8 @@ programError = (err, req, res, next) => {
   response(res, err.message, 400);
 };
 
-response = (res, message, status, data, result) => {
-  res.status(status).send({ message, data, result });
+response = (res, message, status, data, result, token) => {
+  res.status(status).send({ message, data, result, token });
 };
 
 module.exports = { AppError, programError, operationalError, response };

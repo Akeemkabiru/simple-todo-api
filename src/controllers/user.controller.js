@@ -1,11 +1,48 @@
+require("dotenv").config({ path: "./../config/.env" });
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+const { userSignupSchema } = require("../schema");
+const { response, AppError } = require("../utility");
+
 exports.signup = async (req, res, next) => {
-  const { error } = userValidationSchema.validate(req.body, {
+  const { error } = userSignupSchema.validate(req.body, {
     abortEarly: false,
   });
   if (error) return response(res, error.details[0].message, 400);
+  const { firstName, email, password, _id } = req.body;
+  //generated a jwt token
+  const token = jwt.sign({ id: _id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES,
+  });
+
   try {
-    await User.create(req.body);
-    response(res, "User created successfully", 201);
+    const newUser = await User.create({ firstName, email, password });
+    res
+      .status(201)
+      .json({ message: "User created successfully", token, data: newUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.login = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    //check if there is email and password
+    if (!(email && password))
+      return next(new AppError("Provide email and password", 400)); //operational error
+    //check if the user exist
+    const user = await User.findOne({ email: email }).select("password");
+    if (!user) return next(new AppError("Invalid email or password"), 400);
+    //check if the password of the user match the hashed one using bcrypt compare
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect)
+      next(new AppError("Invalid email or password"), 400);
+    const token = jwt.sign({ id: user?._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES,
+    });
+    res.status(200).json({ message: "User authenticated", token });
   } catch (error) {
     next(error);
   }

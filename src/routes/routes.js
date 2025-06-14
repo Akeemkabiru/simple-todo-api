@@ -1,5 +1,5 @@
 const express = require("express");
-const { signup } = require("../controllers/user.controller");
+const { signup, login } = require("../controllers/user.controller");
 const {
   stats,
   createTodo,
@@ -11,6 +11,7 @@ const {
 const appRouter = express.Router();
 
 appRouter.post("/signup", signup);
+appRouter.post("/login", login);
 appRouter.get("/todos/stats", stats);
 appRouter.route("/todos").get(getAllTodo).post(createTodo);
 appRouter
