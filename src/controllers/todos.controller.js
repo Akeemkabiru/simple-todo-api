@@ -38,7 +38,10 @@ exports.getAllTodo = async (req, res, next) => {
 //GET SINGLE TODO
 exports.getATodo = async (req, res, next) => {
   try {
-    const data = await Todo.findById(req.params.id);
+    const data = await Todo.findOne({
+      _id: req.params.id,
+      userId: req.user?.id,
+    });
     if (!data)
       return response(res, `Todo of ID: ${req.params.id} does not exist`, 400);
     response(res, "Todo fetched successfully", 200, data);
@@ -68,7 +71,10 @@ exports.createTodo = async (req, res, next) => {
 //DELETE A TODO
 exports.deleteTodo = async (req, res, next) => {
   try {
-    const deleted = await Todo.findByIdAndDelete(req.params.id);
+    const deleted = await Todo.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user?.id,
+    });
     if (!deleted)
       return response(res, `Todo of ID: ${req.params.id} does not exist`, 400);
     response(res, "Todo deleted successfully", 204);
@@ -81,8 +87,8 @@ exports.deleteTodo = async (req, res, next) => {
 exports.updateTodoStatus = async (req, res, next) => {
   if (!req.body.status) return response(res, "Status not defined", 400);
   try {
-    const doc = await Todo.findByIdAndUpdate(
-      req.params.id,
+    const doc = await Todo.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user?.id },
       { status: req.body.status },
       {
         runValidators: true,
@@ -101,6 +107,9 @@ exports.updateTodoStatus = async (req, res, next) => {
 exports.stats = async (req, res, next) => {
   try {
     const data = await Todo.aggregate([
+      {
+        $match: { userId: req.user?.id },
+      },
       {
         $group: {
           _id: "$status",
