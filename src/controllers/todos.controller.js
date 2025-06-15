@@ -3,31 +3,31 @@ const { response } = require("../utility");
 
 //GET ALL Todo
 exports.getAllTodo = async (req, res, next) => {
-  const queryObj = { ...req.query, userId: req.user.id };
-  const excludedQueries = ["page", "limit", "sort", "field"];
-  excludedQueries.forEach((el) => delete queryObj[el]);
+  // const queryObj = { ...req.query, userId: req.user.id };
+  // const excludedQueries = ["page", "limit", "sort", "field"];
+  // excludedQueries.forEach((el) => delete queryObj[el]);
   //PAGINATION
-  const page = req.query.page;
-  const limit = req.query.limit;
-  const skips = (page - 1) * limit;
+  // const page = req.query.page;
+  // const limit = req.query.limit;
+  // const skips = (page - 1) * limit;
 
-  const totalNums = await Todo.countDocuments();
-  if (totalNums < skips) {
-    response(res, "No more data left", 400);
-  }
+  // const totalNums = await Todo.countDocuments();
+  // if (totalNums < skips) {
+  //   response(res, "No more data left", 400);
+  // }
 
   //LIMIT FIELD
-  const field = req.query.field;
+  // const field = req.query.field;
 
   //SORT
-  const sort = req.query.sort;
+  // const sort = req.query.sort;
 
   try {
-    const query = Todo.find(queryObj)
-      .sort(sort)
-      .skip(skips)
-      .limit(limit)
-      .select(field);
+    const query = Todo.find({ userId: req.user?.id });
+    // .sort(sort)
+    // .skip(skips)
+    // .limit(limit)
+    // .select(field);
     const data = await query;
     response(res, "Todo fetched successfully", 200, data, data.length);
   } catch (error) {

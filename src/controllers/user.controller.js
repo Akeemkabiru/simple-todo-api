@@ -57,7 +57,7 @@ exports.protected = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err || !decoded) return next(new AppError("Invalid token", 401));
-      console.log(decoded);
+
       req.user = decoded;
       next();
     });
