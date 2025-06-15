@@ -33,17 +33,35 @@ exports.login = async (req, res, next) => {
     if (!(email && password))
       return next(new AppError("Provide email and password", 400)); //operational error
     //check if the user exist
-    const user = await User.findOne({ email: email }).select("password");
+    const user = await User.findOne({ email: email }).select("+password");
     if (!user) return next(new AppError("Invalid email or password"), 400);
     //check if the password of the user match the hashed one using bcrypt compare
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect)
-      next(new AppError("Invalid email or password"), 400);
+      return next(new AppError("Invalid email or password"), 400);
+    //generate jwt token
     const token = jwt.sign({ id: user?._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES,
     });
-    res.status(200).json({ message: "User authenticated", token });
+    res.status(200).json({ message: "success", token });
   } catch (error) {
     next(error);
+  }
+};
+
+exports.protected = async (req, res, next) => {
+  try {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader || !authHeader.startsWith("Bearer "))
+      return next(new AppError("Access Denied: No Token Provided", 401));
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err || !decoded) return next(new AppError("Invalid token", 401));
+      console.log(decoded);
+      req.user = decoded;
+      next();
+    });
+  } catch (err) {
+    return next(new AppError("Something went wrong with authentication", 500));
   }
 };

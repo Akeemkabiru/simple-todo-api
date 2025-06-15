@@ -1,3 +1,4 @@
+const { ref } = require("joi");
 const mongoose = require("mongoose");
 const todoSchema = new mongoose.Schema(
   {
@@ -42,6 +43,11 @@ const todoSchema = new mongoose.Schema(
       ],
       default: "Non",
       required: false,
+    },
+    userId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: true,
     },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },

@@ -3,7 +3,7 @@ const { response } = require("../utility");
 
 //GET ALL Todo
 exports.getAllTodo = async (req, res, next) => {
-  const queryObj = { ...req.query };
+  const queryObj = { ...req.query, userId: req.user.id };
   const excludedQueries = ["page", "limit", "sort", "field"];
   excludedQueries.forEach((el) => delete queryObj[el]);
   //PAGINATION
@@ -58,7 +58,7 @@ exports.createTodo = async (req, res, next) => {
     const due = new Date(`${due_date}T${due_time || "00:00"}`);
     const todo = { start, due, ...rest };
 
-    await Todo.create(todo);
+    await Todo.create({ ...todo, userId: req.user?.id });
     response(res, "Todo created successfully", 201);
   } catch (error) {
     next(error);

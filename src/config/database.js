@@ -9,7 +9,7 @@ function connectDB() {
   mongoose
     .connect(DB)
     .then(() => console.log("Connected to database"))
-    .catch(() => console.log("Failed to connect to database"));
+    .catch((err) => console.log(err));
 }
 
 module.exports = connectDB;

@@ -2,11 +2,14 @@ const connectDB = require("./config/database");
 const express = require("express");
 const { operationalError, programError } = require("./utility");
 const appRouter = require("./routes/routes");
+const { protected, signup, login } = require("./controllers/user.controller");
 const app = express();
 
 connectDB();
 app.use(express.json());
-app.use("/v1/api/", appRouter);
+app.post("/signup", signup);
+app.post("/login", login);
+app.use("/", protected, appRouter);
 app.use(operationalError);
 app.use(programError);
 
