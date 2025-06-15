@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "dev": "NODE_ENV=development  nodemon ./src/server.js",
-    "prod": "NODE_ENV=production nodemon ./src/server.js",
+    "dev": "NODE_ENV=development nodemon ./src/server.js",
+    "start": "node ./src/server.js",
     "debug": "ndb server.js"
   },
   "author": "kabiruakeem",
