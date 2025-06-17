@@ -16,6 +16,12 @@ const userSchema = new mongoose.Schema({
     select: false, //wont show in output but databasee
   },
   photo: String,
+  passwordChangedAt: Date,
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "user",
+  },
 });
 
 //crearte a virtual field called confirmpassword which will not be stored in the database
@@ -32,6 +38,18 @@ userSchema
 userSchema.pre("save", async function (val) {
   this.password = await bcrypt.hash(this.password, 12);
 });
+
+//instance method to handle the password changed
+userSchema.methods.ChangedPasswordAfer = function (JWTTimeStamp) {
+  if (this.passwordChangedAt) {
+    const changeTimeStamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    return changeTimeStamp > JWTTimeStamp;
+  }
+  return false;
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

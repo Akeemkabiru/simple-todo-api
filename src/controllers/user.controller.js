@@ -17,6 +17,10 @@ exports.signup = async (req, res, next) => {
   });
 
   try {
+    //check if the user never exist
+    const user = await User.findOne({ email });
+    if (user) return next(new AppError("User already exist", 400));
+
     const newUser = await User.create({ firstName, email, password });
     res
       .status(201)
@@ -51,6 +55,7 @@ exports.login = async (req, res, next) => {
 
 exports.protected = async (req, res, next) => {
   try {
+    //check if there is bearer token on the header
     const authHeader = req.headers["authorization"];
     if (!authHeader || !authHeader.startsWith("Bearer "))
       return next(new AppError("Access Denied: No Token Provided", 401));
@@ -58,10 +63,49 @@ exports.protected = async (req, res, next) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err || !decoded) return next(new AppError("Invalid token", 401));
 
+      //invalidate token when user has changed password
+      const isChangedPassword = User.ChangedPasswordAfer(decoded.iat);
+      if (isChangedPassword)
+        return next(
+          new AppError(
+            "Token is invalid because password was changed, please login again."
+          )
+        );
+
       req.user = decoded;
       next();
     });
   } catch (err) {
     return next(new AppError("Something went wrong with authentication", 500));
+  }
+};
+
+//Authorization: to give permission to a certain user on which resources/functionality they can have access to
+
+exports.restrict = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes[req.user.role])
+      return next(
+        new AppError("You do no have permission to do this action"),
+        403
+      );
+    next();
+  };
+};
+
+//admin
+exports.adminStats = async (req, res, next) => {
+  try {
+    const data = await User.aggregate([
+      {
+        $group: {
+          id: "$role",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+    return response(res, "Stats fetched successfully", 200, data);
+  } catch (error) {
+    next(error);
   }
 };

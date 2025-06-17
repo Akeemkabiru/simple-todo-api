@@ -7,8 +7,10 @@ const {
   deleteTodo,
   updateTodoStatus,
 } = require("../controllers/todos.controller");
+const { restrict, adminStats } = require("../controllers/user.controller");
 const appRouter = express.Router();
 
+appRouter.get("/stats", restrict("admin"), adminStats);
 appRouter.route("/todos/stats", stats);
 appRouter.route("/todos").get(getAllTodo).post(createTodo);
 appRouter
