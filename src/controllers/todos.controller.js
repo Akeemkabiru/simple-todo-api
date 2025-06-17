@@ -3,31 +3,16 @@ const { response } = require("../utility");
 
 //GET ALL Todo
 exports.getAllTodo = async (req, res, next) => {
-  // const queryObj = { ...req.query, userId: req.user.id };
-  // const excludedQueries = ["page", "limit", "sort", "field"];
-  // excludedQueries.forEach((el) => delete queryObj[el]);
-  //PAGINATION
-  // const page = req.query.page;
-  // const limit = req.query.limit;
-  // const skips = (page - 1) * limit;
-
-  // const totalNums = await Todo.countDocuments();
-  // if (totalNums < skips) {
-  //   response(res, "No more data left", 400);
-  // }
-
-  //LIMIT FIELD
-  // const field = req.query.field;
-
-  //SORT
-  // const sort = req.query.sort;
+  const page = req.query.page;
+  const limit = req.query.limit;
+  const skips = (page - 1) * limit;
 
   try {
-    const query = Todo.find({ userId: req.user?.id });
-    // .sort(sort)
-    // .skip(skips)
-    // .limit(limit)
-    // .select(field);
+    const totalNums = await Todo.countDocuments();
+    if (totalNums < skips) {
+      response(res, "No more data left", 400);
+    }
+    const query = Todo.find().skip(skips).limit(limit).select("-__v");
     const data = await query;
     response(res, "Todo fetched successfully", 200, data, data.length);
   } catch (error) {
@@ -40,7 +25,7 @@ exports.getATodo = async (req, res, next) => {
   try {
     const data = await Todo.findOne({
       _id: req.params.id,
-      userId: req.user?.id,
+      userId: req.user?._id,
     });
     if (!data)
       return response(res, `Todo of ID: ${req.params.id} does not exist`, 400);
@@ -60,8 +45,8 @@ exports.createTodo = async (req, res, next) => {
     const start = new Date(`${start_date}T${start_time || "00:00"}`);
     const due = new Date(`${due_date}T${due_time || "00:00"}`);
     const todo = { start, due, ...rest };
-
-    await Todo.create({ ...todo, userId: req.user?.id });
+    console.log(req.user._id);
+    await Todo.create({ ...todo, userId: req.user?._id });
     response(res, "Todo created successfully", 201);
   } catch (error) {
     next(error);
@@ -85,7 +70,8 @@ exports.deleteTodo = async (req, res, next) => {
 
 //MARK TODO STATUS: COMPLETED, PROGRESS OR INCOMPLETED
 exports.updateTodoStatus = async (req, res, next) => {
-  if (!req.body.status) return response(res, "Status not defined", 400);
+  if (!req.body.status || !req.body.status.length)
+    return response(res, "Status is required", 400);
   try {
     const doc = await Todo.findOneAndUpdate(
       { _id: req.params.id, userId: req.user?.id },
@@ -97,7 +83,7 @@ exports.updateTodoStatus = async (req, res, next) => {
     if (!doc)
       return response(res, `Todo of ID: ${req.params.id} does not exist`, 400);
 
-    response(res, `Todo status marked as ${req.body.status}`, 200);
+    response(res, `Todo status updated to  ${req.body.status}`, 200);
   } catch (error) {
     next(error);
   }
