@@ -4,6 +4,17 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { userSignupSchema } = require("../schema");
 const { response, AppError } = require("../utility");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  port: 587,
+  auth: {
+    user: process.env.EMAIL_ADDRESS,
+    pass: process.env.EMAIL_ACCOUNT_PASSWORD,
+  },
+});
 
 exports.signup = async (req, res, next) => {
   try {
@@ -63,7 +74,12 @@ exports.protected = async (req, res, next) => {
     if (!decoded.id) return next(new AppError("Invalid token", 401));
 
     const user = await User.findById({ _id: decoded.id });
-    if (!user) next(new AppError("User no longer exist", 401));
+    if (!user) return next(new AppError("User no longer exist", 401));
+
+    if (user.ChangedPasswordAfer(decoded.iat)) {
+      return next(new AppError("Password has just changed, relogin again"));
+    }
+
     req.user = user;
     next();
   } catch (err) {
@@ -97,6 +113,46 @@ exports.adminStats = async (req, res, next) => {
       },
     ]);
     return response(res, "Stats fetched successfully", 200, data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) return next(new AppError("Provide your email", 400));
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return next(new AppError("User does not exist", 404));
+    const otp = user.generateResetPasswordToken();
+    await user.save({ validateBeforeSave: false });
+
+    await transporter.sendMail({
+      to: req.body.email,
+      from: process.env.EMAIL_ADDRESS,
+      subject: "Todo App",
+      text: "",
+      html: `<h1>Your password reset token is: <strong/>${otp}</h1>`,
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "OTP sent to email",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.otpVerification = async (req, res, next) => {
+  const otp = crypto.createHash("sha256").update(req.body.otp).digest("hex");
+  try {
+    const user = await User.findOne({ passwordResetToken: otp });
+    user.passwordResetToken = "";
+    user.passwordResetTokenExpires = "";
+    console.log(user);
+    response(res, "otp verification successful", 200);
   } catch (error) {
     next(error);
   }

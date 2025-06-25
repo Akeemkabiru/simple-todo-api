@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -13,7 +14,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    select: false, //wont show in output but databasee
+    select: false,
   },
   photo: String,
   passwordChangedAt: Date,
@@ -22,9 +23,10 @@ const userSchema = new mongoose.Schema({
     enum: ["admin", "user"],
     default: "user",
   },
+  passwordResetToken: String,
+  passwordResetTokenExpires: Date,
 });
 
-//crearte a virtual field called confirmpassword which will not be stored in the database
 userSchema
   .virtual("confirmPassword")
   .get(function () {
@@ -34,12 +36,11 @@ userSchema
     this._confirmPassword = value;
   });
 
-//i want to hash the password before saving to database
-userSchema.pre("save", async function (val) {
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) next();
   this.password = await bcrypt.hash(this.password, 12);
 });
 
-//instance method to handle the password changed
 userSchema.methods.ChangedPasswordAfer = function (JWTTimeStamp) {
   if (this.passwordChangedAt) {
     const changeTimeStamp = parseInt(
@@ -51,5 +52,17 @@ userSchema.methods.ChangedPasswordAfer = function (JWTTimeStamp) {
   return false;
 };
 
+userSchema.methods.generateResetPasswordToken = function () {
+  const otp = crypto.randomInt(0, 1000000).toString().padStart(6, "0");
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(otp)
+    .digest("hex");
+
+  this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000;
+
+  return otp;
+};
 const User = mongoose.model("User", userSchema);
 module.exports = User;

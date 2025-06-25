@@ -13,12 +13,16 @@ const {
   login,
   protected,
   restrict,
+  forgotPassword,
+  otpVerification,
 } = require("../controllers/user.controller");
 const appRouter = express.Router();
 
 //Auth
 appRouter.post("/signup", signup);
 appRouter.post("/login", login);
+appRouter.post("/forgotpassword", forgotPassword);
+appRouter.post("/verify-otp", otpVerification);
 
 //ADMIN STATS
 appRouter.get("/stats", protected, restrict("admin"), adminStats);
